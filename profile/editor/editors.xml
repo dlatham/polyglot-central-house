@@ -1,0 +1,16 @@
+<!-- Version 0.0.1 -->
+<editors>
+
+  <!-- Units of measure are all standardized: https://wiki.universal-devices.com/index.php?title=ISY_Developers:API:V5:Appendix:Units_of_Measure -->
+
+  <editor id="PERCENT">
+    <!-- 51 is percentage -->
+    <range uom="51" subset="0-100" />
+  </editor>
+
+  <editor id="bool">
+    <range uom="2" subset="0,1" />
+  </editor>
+
+
+</editors>
