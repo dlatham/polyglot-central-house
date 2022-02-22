@@ -62,7 +62,7 @@ module.exports = function(Polyglot) {
 					logger.errorStack(err, 'GPIO write failed:');
 				} else {
 					logger.info('GPIO write ON complete: %s', this.address)
-					this.setDriver('ST', message.value ? message.value : 1);
+					this.setDriver('ST', 1);
 				}
 			});
 			
@@ -77,7 +77,7 @@ module.exports = function(Polyglot) {
 					logger.errorStack(err, 'GPIO write failed:');
 				} else {
 					logger.info('GPIO write OFF complete: %s', this.address)
-					this.setDriver('ST', message.value ? message.value : 0);
+					this.setDriver('ST', 0);
 				}
 			});
 
