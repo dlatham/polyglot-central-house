@@ -87,7 +87,7 @@ module.exports = function(Polyglot) {
       // Loop through each of the GPIO definitions above and
       // add the node if it hasn't been added already...
       for (let seq = 0; seq < raspi_relays.length; seq++) {
-        let address = prefix + '_gpio_' + raspi_relays[seq].pin.toString();
+        let address = 'gpio_' + raspi_relays[seq].pin.toString();
         if (!nodes[address]) {
           try {
             let result = await this.polyInterface.addNode(
