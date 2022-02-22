@@ -39,7 +39,7 @@
   </nodedef>
 
   <!-- Backyard Audio On/Off -->
-  <nodedef id="ARDUINO_GPIO" nls="gpio">
+  <nodedef id="RASPI_GPIO" nls="gpio">
     <sts>
       <!-- Uses predefined ids: https://wiki.universal-devices.com/index.php?title=ISY_Developers:API:V5:Appendix:Status_Names -->
       <st id="ST" editor="bool" />

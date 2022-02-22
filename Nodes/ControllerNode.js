@@ -9,14 +9,46 @@
 // nodeDefId must match the nodedef id in your nodedef
 const nodeDefId = 'CONTROLLER';
 
+// # Define the GPIOs for lights
+// #CH PIN WIRPI BCM NAME
+// #CH1 29 P21 5 Channel 1
+// #CH2 31 P22 6 Channel 2
+// #CH3 33 P23 13 Channel 3
+// #CH4 36 P27 16 Channel 4
+// #CH5 35 P24 19 Channel 5
+// #CH6 38 P28 20 Channel 6
+// #CH7 40 P29 21 Channel 7
+// #CH8 37 P25 26 Channel 8
+// audio = 29
+// path = 37
+// accent = 40
+// shed = 36 # CHANNEL 4
+// bench = 35
+// landscape = 38
+
+// Here I am defining all of thhe GPIO pins on the raspberry pi
+// as this will be iterated through to create nodes.
+
+// This script will be running on the same raspberry pi so no
+// discovery will be necessary.
+
+const raspi_relays = [
+  {name: 'Yard Audio', pin: 29},
+  {name: 'Path Lights', pin: 37},
+  //{name: 'Garden Lights', pin: 40},
+  {name: 'Shed Lights', pin: 36},
+  {name: 'Bench Lights', pin: 35},
+  {name: 'Landscape Lights', pin: 38}
+]
+
 module.exports = function(Polyglot) {
   // Utility function provided to facilitate logging.
   const logger = Polyglot.logger;
 
   // In this example, we also need to have our custom node because we create
   // nodes from this controller. See onCreateNew
-  const MyNode = require('./MyNode.js')(Polyglot);
-  const ArduinoGpio = require('./ArduinoGpio.js')(Polyglot);
+  //const MyNode = require('./MyNode.js')(Polyglot);
+  const RaspiGpio = require('./RaspiGpio.js')(Polyglot);
 
   class Controller extends Polyglot.Node {
     // polyInterface: handle to the interface
@@ -52,29 +84,19 @@ module.exports = function(Polyglot) {
       const prefix = 'centralhouse';
       const nodes = this.polyInterface.getNodes();
 
-      // Finds the first available address and creates a node.
-      for (let seq = 0; seq < 999; seq++) {
-        // address will be <prefix><seq>
-        const address = prefix + seq.toString().padStart(3, '0');
-
+      // Loop through each of the GPIO definitions above and
+      // add the node if it hasn't been added already...
+      for (let seq = 0; seq < raspi_relays.length; seq++) {
+        let address = prefix + '_gpio_' + raspi_relays[seq].pin.toString();
         if (!nodes[address]) {
-          // ISY Address will be n<profileNum>_<prefix><seq>
-          // name will be <prefix><seq>
           try {
-            const result = await this.polyInterface.addNode(
-              new MyNode(this.polyInterface, this.address, address, address)
+            let result = await this.polyInterface.addNode(
+              new RaspiGpio(this.polyInterface, this.address, address, raspi_relays[seq].name)
             );
-
-            const resulttwo = await this.polyInterface.addNode(
-              new ArduinoGpio(this.polyInterface, this.address, address, address)
-            );
-
             logger.info('Add node worked: %s', result);
-            logger.info('Add node worked: %s', resulttwo);
-          } catch (err) {
+          } catch(err){
             logger.errorStack(err, 'Add node failed:');
           }
-          break;
         }
       }
     }

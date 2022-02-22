@@ -12,8 +12,9 @@
   "dependencies": {
     "async-lock": "^1.1.4",
     "markdown": "^0.5.0",
+    "pgc_interface": "^1.0.11",
     "polyinterface": "^1.2.0",
-    "pgc_interface": "^1.0.11"
+    "rpi-gpio": "^2.1.7"
   },
   "devDependencies": {
     "eslint": "^5.12.0",

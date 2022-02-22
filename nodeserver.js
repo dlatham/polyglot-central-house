@@ -24,8 +24,8 @@ const lock = new AsyncLock({ timeout: 500 });
 // Those are the node definitions that our nodeserver uses.
 // You will need to edit those files.
 const ControllerNode = require('./Nodes/ControllerNode.js')(Polyglot);
-const MyNode = require('./Nodes/MyNode.js')(Polyglot);
-const ArduinoGpio = require('./Nodes/ArduinoGpio.js')(Polyglot);
+//const MyNode = require('./Nodes/MyNode.js')(Polyglot);
+const RaspiGpio = require('./Nodes/RaspiGpio.js')(Polyglot);
 
 // Names of our customParams
 const emailParam = 'User';
@@ -70,7 +70,7 @@ logger.info('Starting Node Server');
 
 // Create an instance of the Polyglot interface. We need pass all the node
 // classes that we will be using.
-const poly = new Polyglot.Interface([ControllerNode, MyNode, ArduinoGpio]);
+const poly = new Polyglot.Interface([ControllerNode, RaspiGpio]);
 
 // Connected to MQTT, but config has not yet arrived.
 poly.on('mqttConnected', function() {
@@ -225,7 +225,7 @@ async function doPoll(longPoll) {
 async function autoCreateController() {
   try {
     await poly.addNode(
-      new ControllerNode(poly, 'controller', 'controller', 'NodeServer')
+      new ControllerNode(poly, 'controller', 'controller', 'CentralHouseNodes')
     );
   } catch (err) {
     logger.error('Error creating controller node');
