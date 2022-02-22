@@ -2,6 +2,7 @@
 
 // nodeDefId must match the nodedef id in your nodedef
 const nodeDefId = 'RASPI_GPIO';
+const gpio = require('rpi-gpio');
 
 module.exports = function(Polyglot) {
 	// Utility function provided to facilitate logging.
@@ -36,8 +37,19 @@ module.exports = function(Polyglot) {
 			// Should match the 'sts' section of the nodedef.
 			// https://wiki.universal-devices.com/index.php?title=ISY_Developers:API:V5:Appendix:Units_of_Measure 
 			this.drivers = {
-				ST: {value: '0', uom: 2},
+				ST: {value: '0', uom: 2}
 			};
+
+			this.pin = parseInt(address.split('_')[1]);
+			gpio.setup(this.pin, gpio.DIR_HIGH, err => {
+				if(err) {
+					logger.errorStack(err, 'Setup of GPIO failed:');
+				} else {
+					logger.info('GPIO setup complete: %s', this.address)
+				}
+			});
+
+
 		}
 
 		onDON(message) {
@@ -45,13 +57,30 @@ module.exports = function(Polyglot) {
 				this.address,
 				message.value ? message.value : 'No value');
 
-			// setDrivers accepts string or number (message.value is a string)
-			this.setDriver('ST', message.value ? message.value : '100');
+			gpio.write(this.pin, false, err => {
+				if(err){
+					logger.errorStack(err, 'GPIO write failed:');
+				} else {
+					logger.info('GPIO write ON complete: %s', this.address)
+					this.setDriver('ST', message.value ? message.value : 1);
+				}
+			});
+			
 		}
 
 		onDOF() {
 			logger.info('DOF (%s)', this.address);
-			this.setDriver('ST', '0');
+
+
+			gpio.write(this.pin, true, err => {
+				if(err){
+					logger.errorStack(err, 'GPIO write failed:');
+				} else {
+					logger.info('GPIO write OFF complete: %s', this.address)
+					this.setDriver('ST', message.value ? message.value : 0);
+				}
+			});
+
 		}
 	
 	};
