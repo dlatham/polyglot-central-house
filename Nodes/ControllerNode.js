@@ -21,10 +21,11 @@ const nodeDefId = 'CONTROLLER';
 // #CH8 37 P25 26 Channel 8
 // audio = 29
 // path = 37
-// accent = 40
+// accent = 33
+// landscape2 = 33
 // shed = 36 # CHANNEL 4
 // bench = 35
-// landscape = 38
+// landscape = 40
 
 // Here I am defining all of thhe GPIO pins on the raspberry pi
 // as this will be iterated through to create nodes.
@@ -35,10 +36,9 @@ const nodeDefId = 'CONTROLLER';
 const raspi_relays = [
   {name: 'Yard Audio', pin: 29},
   {name: 'Path Lights', pin: 37},
-  //{name: 'Garden Lights', pin: 40},
   {name: 'Shed Lights', pin: 36},
   {name: 'Bench Lights', pin: 35},
-  {name: 'Landscape Lights', pin: 38}
+  {name: 'Landscape Lights', pin: 40}
 ]
 
 module.exports = function(Polyglot) {
